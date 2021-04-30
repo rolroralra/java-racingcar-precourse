@@ -8,6 +8,12 @@
 
 ---
 ## Functionality Requirements
+- [ ] 주어진 횟수 동안 n대의 자동차는 전진 또는 멈출 수 있다. (RacingGame)
+- [ ] 각 자동차에 이름을 부여할 수 있다. (RacingCar)
+- [ ] 각 자동차 이름은 5자 이하만 가능하다. (RacingCar - Validation)
+- [ ] 사용자는 몇 번의 이동을 할 것인지를 입력할 수 있어야 한다. (View, Controller)
+- [ ] 전진하는 조건은 0에서 9 사이에서 random 값을 구한 후, random 값이 4 이상일 경우 전진하고, 3 이하일 경우 멈춘다. (RacingCar - Trial Validation)
+- [ ] 자동차 경주 게임을 완료한 후 누가 우승했는지를 알려준다. 우승자는 한 명 이상일 수 있다. (RacingGame)
 
 ---
 ## Programming Requirements
@@ -22,6 +28,10 @@
     - Implement unit test for logic. (But not need for UI Layer.)
     - Logic Layer, UI Layer
     - Using JUnit5, AssertJ
+
+3. Code Refactoring
+    - Implementation by using First Class Collection
+    - Wrapping all primitive and string values 
     
 ---
 ## Project Requirements
