@@ -1,13 +1,13 @@
 package game.utils;
 
-import game.model.RacingCar;
+public interface RandomNumberGenerator {
+    int generateRandomNumber();
 
-import java.util.Random;
+    default int nextInt() {
+        return generateRandomNumber();
+    }
 
-public class RandomNumberGenerator {
-    private static final Random RANDOM = new Random();
-
-    public static int nextInt() {
-        return RacingCar.convertToValidNumber(RANDOM.nextInt());
+    static RandomNumberGenerator getDefault() {
+        return new DefaultRandomNumberGenerator();
     }
 }

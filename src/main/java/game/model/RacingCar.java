@@ -1,20 +1,9 @@
 package game.model;
 
-import game.utils.RandomNumberGenerator;
 import lombok.Getter;
 
-import java.util.Objects;
-
 @Getter
-public class RacingCar implements Comparable<RacingCar> {
-    public static final int MAX_NAME_LENGTH = 5;
-    public static final int MIN_VALID_NUMBER = 0;
-    public static final int MAX_VALID_NUMBER = 9;
-    public static final int MIN_SUCCESS_NUMBER = 4;
-    public static final int MAX_SUCCESS_NUMBER = 9;
-    private static final int SUCCESS_NUMBER_RANGE = MAX_SUCCESS_NUMBER - MIN_SUCCESS_NUMBER + 1;
-    private static final int VALID_NUMBER_RANGE = MAX_VALID_NUMBER - MIN_VALID_NUMBER + 1;
-
+public class RacingCar extends AbstractRacingCar implements Comparable<RacingCar> {
     private final String name;
     private int score;
 
@@ -26,27 +15,17 @@ public class RacingCar implements Comparable<RacingCar> {
         this.score = 0;
     }
 
-    public static boolean checkValidToGo(int number) {
-        return number >= MIN_VALID_NUMBER && number <= MAX_VALID_NUMBER;
-    }
-
-    public static boolean checkSuccessToGo(int number) {
-        return number >= MIN_SUCCESS_NUMBER && number <= MAX_SUCCESS_NUMBER;
-    }
-
-    public static int convertToValidNumber(int number) {
-        return ((number % VALID_NUMBER_RANGE) + VALID_NUMBER_RANGE) % VALID_NUMBER_RANGE + MIN_VALID_NUMBER;
-    }
-
-    public static int convertToSuccessNumer(int number) {
-        return ((number % SUCCESS_NUMBER_RANGE) + SUCCESS_NUMBER_RANGE) % SUCCESS_NUMBER_RANGE + MIN_SUCCESS_NUMBER;
-    }
-
-    public void tryToGo() {
-        // TODO: Strategy Pattern for segregation random generation interface
-        if (checkSuccessToGo(RandomNumberGenerator.nextInt())) {
+    public boolean tryToGo(int number) {
+        if (checkSuccessToGo(number)) {
             this.score++;
+            return true;
         }
+
+        return false;
+    }
+
+    public boolean tryToGo() {
+        return tryToGo(nextInt());
     }
 
     private static boolean isValidName(String name) {
@@ -59,7 +38,7 @@ public class RacingCar implements Comparable<RacingCar> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(name);
+        final StringBuilder sb = new StringBuilder(String.format("%-" + MAX_NAME_LENGTH + "s", name));
         sb.append(":");
         for (int i = 0; i < score; i++) {
             sb.append("-");
