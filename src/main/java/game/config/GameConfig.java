@@ -1,6 +1,6 @@
 package game.config;
 
-import game.constants.MessageKey;
+import game.constants.RacingGameMessage;
 import lombok.Getter;
 
 import java.io.InputStream;
@@ -47,8 +47,7 @@ public class GameConfig {
         }
 
         public Builder locale(String languageTag) {
-            this.locale = Locale.forLanguageTag(languageTag);
-            return this;
+            return locale(Locale.forLanguageTag(languageTag));
         }
 
         public GameConfig build() {
@@ -71,17 +70,9 @@ public class GameConfig {
         return this.resourceBundle.getString(key);
     }
 
-    public String getMessage(MessageKey key) {
-        return this.getMessage(key.name());
+    public String getMessage(RacingGameMessage racingGameMessage) {
+        return this.getMessage(racingGameMessage.getKey());
     }
-
-//    private String convertEncoding(String input) {
-//        return this.convertEncoding(input, StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8);
-//    }
-//
-//    private String convertEncoding(String input, Charset from, Charset to) {
-//        return new String(input.getBytes(from), to);
-//    }
 
     public static Builder builder() {
         return new Builder();

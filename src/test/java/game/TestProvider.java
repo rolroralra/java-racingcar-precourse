@@ -36,6 +36,14 @@ public class TestProvider {
                 .collect(Collectors.toList());
     }
 
+    public static List<Arguments> providePositiveTotalTryCounts() {
+        return provideIntRange(1, 100);
+    }
+
+    public static List<Arguments> provideNonPositiveTotalTryCounts() {
+        return provideIntRange(MIN_TEST_NUMBER, 0);
+    }
+
     private static List<Arguments> provideIntRange(int startInclusive, int endInclusive) {
         return IntStream.range(startInclusive, endInclusive + 1)
                 .mapToObj(Arguments::of)
