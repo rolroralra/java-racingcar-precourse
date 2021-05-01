@@ -51,6 +51,8 @@ public class RacingGameView extends GameView {
 
 
     public void printRacingGameHistory(RacingGame racingGame) {
-        println(racingGame.getHistoryString());
+        println(
+                racingGame.getHistoryString()
+        );
     }
 }

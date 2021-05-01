@@ -2,9 +2,11 @@ package game.model;
 
 import game.constants.RacingGameMessage;
 import game.exception.GameException;
+import game.utils.StringJoinUtil;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class RacingGame {
@@ -82,14 +84,14 @@ public class RacingGame {
         return winners;
     }
 
+    private List<String> getWinnerNameList() {
+        return findWinners().stream()
+                .map(RacingCar::getName)
+                .collect(Collectors.toList());
+    }
+
     public String getHistoryString() {
-        StringJoiner sj = new StringJoiner("\n\n");
-
-        for (RacingHistory racingHistory: racingHistoryList) {
-            sj.add(racingHistory.toString());
-        }
-
-        return sj.toString();
+        return StringJoinUtil.join(racingHistoryList, "\n\n");
     }
 
     public String getResultString() {
@@ -101,13 +103,7 @@ public class RacingGame {
             throw new GameException(RacingGameMessage.RACING_GAME_NOT_COMPLETED_EXCEPTION_FORMAT, this.tryCount, this.totalTryCount);
         }
 
-        StringJoiner sj = new StringJoiner(delimiter, prefix, suffix);
-
-        for (RacingCar car : findWinners()) {
-            sj.add(car.getName());
-        }
-
-        return sj.toString();
+        return StringJoinUtil.join(getWinnerNameList(), delimiter, prefix, suffix);
     }
 
     public String description() {
@@ -119,11 +115,6 @@ public class RacingGame {
 
     @Override
     public String toString() {
-        final StringJoiner sj = new StringJoiner("\n");
-        for (RacingCar car : racingCarList) {
-            sj.add(car.toString());
-        }
-
-        return sj.toString();
+        return StringJoinUtil.join(racingCarList, "\n");
     }
 }

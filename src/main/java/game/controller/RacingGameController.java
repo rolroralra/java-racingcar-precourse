@@ -33,14 +33,6 @@ public class RacingGameController extends GameTemplate {
         view.printNewLine();
     }
 
-    private int readTotalTryCount() {
-        return Integer.parseInt(readLine().trim());
-    }
-
-    private String[] readRacingCarNames() {
-        return readLine().split(view.RACING_CARS_INPUT_DELIMITER);
-    }
-
     @Override
     protected void process() {
         racingGame.nextStep();
@@ -62,5 +54,13 @@ public class RacingGameController extends GameTemplate {
     @Override
     protected void handleException(Exception e) {
         view.print(e);
+    }
+
+    private int readTotalTryCount() {
+        return Integer.parseInt(readLine().trim());
+    }
+
+    private String[] readRacingCarNames() {
+        return readLine().split(view.RACING_CARS_INPUT_DELIMITER);
     }
 }
