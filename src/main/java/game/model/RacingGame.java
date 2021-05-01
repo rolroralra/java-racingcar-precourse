@@ -7,23 +7,43 @@ import java.util.*;
 @Getter
 public class RacingGame {
     private List<RacingCar> carList;
+    private int totalTryCount;
     private int tryCount;
 
-    public RacingGame(RacingCar ...cars) {
-        this(Arrays.asList(cars));
+    public RacingGame(int totalTryCount, RacingCar ...cars) {
+        this(totalTryCount, Arrays.asList(cars));
     }
 
-    public RacingGame(List<RacingCar> carList) {
+    public RacingGame(int totalTryCount, List<RacingCar> carList) {
         this.carList = carList;
         this.tryCount = 0;
+        this.totalTryCount = totalTryCount;
+    }
+
+    public void nextAllStep() {
+        nextStep(this.totalTryCount - this.tryCount);
+    }
+
+    public void nextStep(int tryCount) {
+        for (int i = 0; i < tryCount && !isCompleted(); i++) {
+            nextStep();
+        }
     }
 
     public void nextStep() {
+        if (isCompleted()) {
+            return;
+        }
+
         for (RacingCar car : carList) {
             car.tryToGo();
         }
 
         tryCount++;
+    }
+
+    public boolean isCompleted() {
+        return this.totalTryCount <= this.tryCount;
     }
 
     public List<RacingCar> findWinners() {
@@ -51,11 +71,11 @@ public class RacingGame {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("실행결과");
+        final StringJoiner sj = new StringJoiner("\n");
         for (RacingCar car : carList) {
-            sb.append("\n").append(car.toString());
+            sj.add(car.toString());
         }
 
-        return sb.toString();
+        return sj.toString();
     }
 }

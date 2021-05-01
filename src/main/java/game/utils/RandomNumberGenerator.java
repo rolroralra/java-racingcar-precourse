@@ -8,6 +8,6 @@ public class RandomNumberGenerator {
     private static final Random RANDOM = new Random();
 
     public static int nextInt() {
-        return RacingCar.toValid(RANDOM.nextInt());
+        return RacingCar.convertToValidNumber(RANDOM.nextInt());
     }
 }
