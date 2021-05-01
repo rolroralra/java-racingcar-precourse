@@ -1,13 +1,19 @@
 package game.model;
 
+import game.exception.GameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class RacingGameTest {
     private RacingCar[] racingCarArray;
@@ -28,9 +34,42 @@ public class RacingGameTest {
         racingGame = new RacingGame(totalTryCount, racingCarArray);
     }
 
+    @DisplayName("레이싱_게임_생성자_정상_작동_테스트")
+    @ParameterizedTest
+    @MethodSource("game.TestProvider#providePositiveTotalTryCounts")
+    public void 레이싱_게임_생성자_정상_작동_테스트(int totalTryCount) {
+        racingGame = new RacingGame(totalTryCount, racingCarArray);
+        this.totalTryCount = totalTryCount;
+
+        racingGame.nextAllStep();
+
+        assertCompletedRacingGame(racingGame);
+
+        printRacingGame(racingGame);
+    }
+
+    @DisplayName("레이싱_게임_생성자_총_시도_회수_음수_값_예외_테스트")
+    @ParameterizedTest
+    @MethodSource("game.TestProvider#provideNonPositiveTotalTryCounts")
+    public void 레이싱_게임_생성자_총_시도_회수_음수_값_예외_테스트(int totalTryCount) {
+        assertThatExceptionOfType(GameException.class)
+                .isThrownBy(() -> new RacingGame(totalTryCount, racingCarArray));
+    }
+
+    @DisplayName("레이싱_게임_생성자_레이싱카_0대_예외_테스트")
+    @ParameterizedTest
+    @MethodSource("game.TestProvider#providePositiveTotalTryCounts")
+    public void 레이싱_게임_생성자_레이싱카_0대_예외_테스트(int totalTryCount) {
+        assertThatExceptionOfType(GameException.class)
+                .isThrownBy(() -> new RacingGame(totalTryCount));
+
+        assertThatExceptionOfType(GameException.class)
+                .isThrownBy(() -> new RacingGame(totalTryCount, new ArrayList<>()));
+    }
+
     @DisplayName("레이싱_게임_단위_진행_테스트")
     @Test
-    void 레이싱_게임_단위_진행_테스트() {
+    public void 레이싱_게임_단위_진행_테스트() {
         while(!racingGame.isCompleted()) {
             racingGame.nextStep();
         }
@@ -48,7 +87,7 @@ public class RacingGameTest {
 
     @DisplayName("레이싱_게임_다중_단위_진행_테스트")
     @Test
-    void 레이싱_게임_다중_단위_진행_테스트() {
+    public void 레이싱_게임_다중_단위_진행_테스트() {
         racingGame.nextStep(totalTryCount);
 
         // TODO: Exception Handling for already completed RacingGame
@@ -64,7 +103,7 @@ public class RacingGameTest {
 
     @DisplayName("레이싱_게임_자동_진행_테스트")
     @Test
-    void 레이싱_게임_자동_진행_테스트() {
+    public void 레이싱_게임_자동_진행_테스트() {
         racingGame.nextAllStep();
 
         // TODO: Exception Handling for already completed RacingGame
@@ -80,21 +119,21 @@ public class RacingGameTest {
 
     @DisplayName("레이싱_게임_미완료_테스트")
     @Test
-    void 레이싱_게임_미완료_테스트() {
+    public void 레이싱_게임_미완료_테스트() {
         int tryCount = new Random().nextInt(totalTryCount);
         racingGame.nextStep(tryCount);
 
         assertThat(racingGame.isCompleted()).isFalse();
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> racingGame.getResultString())
-                .withMessage("아직 종료되지 않았습니다. Total: %d, Current: %d", totalTryCount, tryCount);
+        assertThatExceptionOfType(GameException.class)
+                .isThrownBy(() -> racingGame.getResultString());
 
         System.out.println(racingGame);
     }
 
     private void printRacingGame(RacingGame racingGame) {
         System.out.println(racingGame);
-
+        System.out.println(racingGame.description());
+        System.out.println(racingGame.getHistoryString());
         System.out.println(racingGame.getResultString());
     }
 
@@ -102,13 +141,19 @@ public class RacingGameTest {
         // RacingGame 기본 정보 체크
         assertThat(racingGame.getTryCount()).isEqualTo(totalTryCount);
         assertThat(racingGame.getTotalTryCount()).isEqualTo(totalTryCount);
-        assertThat(racingGame.getCarList()).asList().hasSameSizeAs(racingCarArray);
-        assertThat(racingGame.toString().split("\n").length).isEqualTo(racingGame.getCarList().size());
+        assertThat(racingGame.getRacingCarList()).asList().hasSameSizeAs(racingCarArray);
+        assertThat(racingGame.toString().split("\n").length).isEqualTo(racingGame.getRacingCarList().size());
+
+        // RacingHistory 체크
+        assertThat(racingGame.getRacingHistoryList()).asList()
+                .hasSize(totalTryCount)
+                .map(o -> ((RacingHistory)o).getHistoryRacingCarList()).asList()
+                .doesNotContainAnyElementsOf(Arrays.asList(racingCarArray));
 
         // 우승자 1명 이상 체크
         assertThat(racingGame.findWinners())
                 .asList()
-                .hasSizeBetween(1, racingGame.getCarList().size())
+                .hasSizeBetween(1, racingGame.getRacingCarList().size())
                 .hasOnlyElementsOfType(RacingCar.class);
 
         // 우승자 동점 체크
