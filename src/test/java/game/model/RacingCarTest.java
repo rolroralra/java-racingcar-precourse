@@ -30,7 +30,7 @@ public class RacingCarTest {
         // TODO: Exception Class or Exception Message
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> new RacingCar(carName))
-                .withMessage(String.format("Car name's length should be less or equal to %d", MAX_NAME_LENGTH));
+                .withMessage("Car name's length should be less or equal to %d", MAX_NAME_LENGTH);
     }
 
     @DisplayName("랜덤_숫자_0_9_유효성_검증_성공_테스트")
@@ -73,7 +73,7 @@ public class RacingCarTest {
     @MethodSource(value = {
             "game.TestProvider#provideSuccessRandomNumbers"
     })
-    void 레이싱카_전진_테스트(int number) {
+    void 레이싱카_수동_입력값_전진_테스트(int number) {
         RacingCar racingCar = new RacingCar("test");
         assertThat(racingCar.tryToGo(number)).isTrue();
         assertThat(racingCar.getScore()).isEqualTo(1);
@@ -85,7 +85,7 @@ public class RacingCarTest {
             "game.TestProvider#provideFailedRandomNumbers",
             "game.TestProvider#provideInValidRandomNumbers",
     })
-    void 레이싱카_정지_테스트(int number) {
+    void 레이싱카_수동_입력값_정지_테스트(int number) {
         RacingCar racingCar = new RacingCar("test");
         assertThat(racingCar.tryToGo(number)).isFalse();
         assertThat(racingCar.getScore()).isEqualTo(0);
@@ -115,7 +115,7 @@ public class RacingCarTest {
         assertThat(RacingCar.checkSuccessToGo(RacingCar.convertToSuccessNumber(number))).isTrue();
     }
 
-    @DisplayName("Custom_RandomNumberGenerator_테스트")
+    @DisplayName("랜덤_생성자_사용자_설정_레이싱카_전진_테스트")
     @Test
     void 랜덤_생성자_사용자_설정_레이싱카_전진_테스트() {
         RacingCar car = new RacingCar("test");

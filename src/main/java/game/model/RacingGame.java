@@ -6,8 +6,8 @@ import java.util.*;
 
 @Getter
 public class RacingGame {
-    private List<RacingCar> carList;
-    private int totalTryCount;
+    private final List<RacingCar> carList;
+    private final int totalTryCount;
     private int tryCount;
 
     public RacingGame(int totalTryCount, RacingCar ...cars) {
@@ -60,6 +60,11 @@ public class RacingGame {
     }
 
     public String getResultString() {
+        // TODO: Add Exception Class And Message Bundle
+        if (!isCompleted()) {
+            throw new RuntimeException(String.format("아직 종료되지 않았습니다. Total: %d, Current: %d", totalTryCount, tryCount));
+        }
+
         StringJoiner sj = new StringJoiner(", ", "", "가 최종 우승했습니다.");
 
         for (RacingCar car : findWinners()) {

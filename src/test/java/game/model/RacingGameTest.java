@@ -4,9 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class RacingGameTest {
     private RacingCar[] racingCarArray;
@@ -30,7 +31,7 @@ public class RacingGameTest {
     @DisplayName("레이싱_게임_단위_진행_테스트")
     @Test
     void 레이싱_게임_단위_진행_테스트() {
-        for (int i = 0; i < totalTryCount; i++) {
+        while(!racingGame.isCompleted()) {
             racingGame.nextStep();
         }
 
@@ -40,7 +41,7 @@ public class RacingGameTest {
         racingGame.nextStep(3);
         racingGame.nextAllStep();
 
-        assertRacingGame(racingGame);
+        assertCompletedRacingGame(racingGame);
 
         printRacingGame(racingGame);
     }
@@ -56,10 +57,9 @@ public class RacingGameTest {
         racingGame.nextStep(3);
         racingGame.nextAllStep();
 
-        assertRacingGame(racingGame);
+        assertCompletedRacingGame(racingGame);
 
         printRacingGame(racingGame);
-
     }
 
     @DisplayName("레이싱_게임_자동_진행_테스트")
@@ -73,25 +73,50 @@ public class RacingGameTest {
         racingGame.nextStep(3);
         racingGame.nextAllStep();
 
-        assertRacingGame(racingGame);
+        assertCompletedRacingGame(racingGame);
 
         printRacingGame(racingGame);
     }
 
+    @DisplayName("레이싱_게임_미완료_테스트")
+    @Test
+    void 레이싱_게임_미완료_테스트() {
+        int tryCount = new Random().nextInt(totalTryCount);
+        racingGame.nextStep(tryCount);
+
+        assertThat(racingGame.isCompleted()).isFalse();
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> racingGame.getResultString())
+                .withMessage("아직 종료되지 않았습니다. Total: %d, Current: %d", totalTryCount, tryCount);
+
+        System.out.println(racingGame);
+    }
+
     private void printRacingGame(RacingGame racingGame) {
         System.out.println(racingGame);
+
         System.out.println(racingGame.getResultString());
     }
 
-    private void assertRacingGame(RacingGame racingGame) {
+    private void assertCompletedRacingGame(RacingGame racingGame) {
+        // RacingGame 기본 정보 체크
         assertThat(racingGame.getTryCount()).isEqualTo(totalTryCount);
         assertThat(racingGame.getTotalTryCount()).isEqualTo(totalTryCount);
         assertThat(racingGame.getCarList()).asList().hasSameSizeAs(racingCarArray);
         assertThat(racingGame.toString().split("\n").length).isEqualTo(racingGame.getCarList().size());
-        assertThat(racingGame.findWinners()).asList()
+
+        // 우승자 1명 이상 체크
+        assertThat(racingGame.findWinners())
+                .asList()
                 .hasSizeBetween(1, racingGame.getCarList().size())
                 .hasOnlyElementsOfType(RacingCar.class);
-        assertThat(racingGame.findWinners().stream().map(RacingCar::getScore).collect(Collectors.toSet()).size())
-                .isEqualTo(1);
+
+        // 우승자 동점 체크
+        assertThat(
+                racingGame.findWinners().stream()
+                        .map(RacingCar::getScore)
+                        .collect(Collectors.toSet())
+                        .size()
+        ).isEqualTo(1);
     }
 }
