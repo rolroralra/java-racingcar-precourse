@@ -1,7 +1,7 @@
 package game.model;
 
-import game.constants.RacingGameMessage;
 import game.exception.GameException;
+import game.exception.GameExceptionCode;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class RacingCar extends AbstractRacingCar implements Comparable<RacingCar
 
     public RacingCar(String name) {
         if (!isValidName(name)) {
-            throw new GameException(RacingGameMessage.RACING_CAR_INVALID_NAME_EXCEPTION_FORMAT, RacingCar.MAX_NAME_LENGTH, name);
+            throw new GameException(GameExceptionCode.RACING_CAR_INVALID_NAME, this);
         }
 
         this.name = name;

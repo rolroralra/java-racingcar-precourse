@@ -1,6 +1,6 @@
 package game.config;
 
-import game.constants.RacingGameMessage;
+import game.constants.GameMessage;
 import lombok.Getter;
 
 import java.io.InputStream;
@@ -70,8 +70,8 @@ public class GameConfig {
         return this.resourceBundle.getString(key);
     }
 
-    public String getMessage(RacingGameMessage racingGameMessage) {
-        return this.getMessage(racingGameMessage.getKey());
+    public String getMessage(GameMessage gameMessage) {
+        return this.getMessage(gameMessage.name());
     }
 
     public static Builder builder() {

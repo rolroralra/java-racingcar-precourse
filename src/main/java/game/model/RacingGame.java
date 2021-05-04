@@ -1,11 +1,14 @@
 package game.model;
 
-import game.constants.RacingGameMessage;
 import game.exception.GameException;
+import game.exception.GameExceptionCode;
 import game.utils.StringJoinUtil;
 import lombok.Getter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -21,7 +24,7 @@ public class RacingGame {
 
     public RacingGame(int totalTryCount, List<RacingCar> racingCarList) {
         if (!checkTotalTryCount(totalTryCount) || !checkRacingCarList(racingCarList)) {
-            throw new GameException(RacingGameMessage.RACING_GAME_INVALID_EXCEPTION_FORMAT);
+            throw new GameException(GameExceptionCode.RACING_GAME_INVALID, this);
         }
 
         this.racingCarList = racingCarList;
@@ -100,7 +103,7 @@ public class RacingGame {
 
     public String getResultString(String delimiter, String prefix, String suffix) {
         if (!isCompleted()) {
-            throw new GameException(RacingGameMessage.RACING_GAME_NOT_COMPLETED_EXCEPTION_FORMAT, this.tryCount, this.totalTryCount);
+            throw new GameException(GameExceptionCode.RACING_GAME_NOT_COMPLETED, this);
         }
 
         return StringJoinUtil.join(getWinnerNameList(), delimiter, prefix, suffix);

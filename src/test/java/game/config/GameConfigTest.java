@@ -1,6 +1,6 @@
 package game.config;
 
-import game.constants.RacingGameMessage;
+import game.constants.GameMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,7 +50,8 @@ public class GameConfigTest {
                 .outputStream(System.out)
                 .locale(languageTag)
                 .build();
-        Map<String, String> messageMap = Arrays.stream(RacingGameMessage.values())
+
+        Map<String, String> messageMap = Arrays.stream(GameMessage.values())
                 .collect(Collectors.toMap(Enum::name, config::getMessage));
 
         assertThat(convertResourceBundleToMap(config.getResourceBundle())).containsExactlyInAnyOrderEntriesOf(messageMap);

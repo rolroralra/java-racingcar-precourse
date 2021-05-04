@@ -2,6 +2,7 @@ package game.controller;
 
 import game.config.GameConfig;
 import game.exception.GameException;
+import lombok.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public abstract class GameTemplate {
     // Reader Bean
     protected BufferedReader reader;
 
-    public GameTemplate(GameConfig config) {
+    public GameTemplate(@NonNull GameConfig config) {
         this.config = config;
         this.writer = new PrintStream(config.getOutputStream());
         this.reader = new BufferedReader(new InputStreamReader(config.getInputStream()));

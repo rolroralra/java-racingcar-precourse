@@ -37,6 +37,6 @@ public class GameView {
     }
 
     public void println(GameException e){
-        _println(String.format(config.getMessage(e.getRacingGameMessage()), e.getArguments()));
+        _println(String.format(config.getMessage(e.getMessageKey()), e.getArguments()));
     }
 }

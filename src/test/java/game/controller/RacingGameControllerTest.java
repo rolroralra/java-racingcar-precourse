@@ -1,7 +1,7 @@
 package game.controller;
 
 import game.config.GameConfig;
-import game.constants.RacingGameMessage;
+import game.constants.GameMessage;
 import game.model.RacingCar;
 import game.model.RacingGame;
 import game.model.RacingHistory;
@@ -82,7 +82,7 @@ class RacingGameControllerTest {
     }
 
     private void readUserInputCarNames(String carNames) {
-        userInputRacingCarList = RacingCar.of(carNames.split(GameConfig.getDefault().getMessage(RacingGameMessage.RACING_CARS_INPUT_DELIMITER)));
+        userInputRacingCarList = RacingCar.of(carNames.split(GameConfig.getDefault().getMessage(GameMessage.RACING_CARS_INPUT_DELIMITER)));
 
         userInput(carNames);
     }

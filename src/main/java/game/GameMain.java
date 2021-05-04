@@ -7,7 +7,7 @@ import game.controller.RacingGameController;
 public class GameMain {
     public static void main(String[] args) {
         GameConfig config = GameConfig.builder()
-                .locale("ko")
+                .locale("en")
                 .build();
         GameTemplate game = new RacingGameController(config);
         game.run();

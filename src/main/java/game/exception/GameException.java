@@ -1,65 +1,43 @@
 package game.exception;
 
-import game.constants.RacingGameMessage;
 import lombok.Getter;
 
 import java.util.Arrays;
 
 @Getter
 public class GameException extends RuntimeException {
-    private RacingGameMessage racingGameMessage;
-    private Object[] arguments;
+    private final GameExceptionCode exceptionCode;
+    private final Object[] arguments;
 
     public GameException(String message) {
         super(message);
+        this.exceptionCode = GameExceptionCode.GAME_INTERNAL;
+        this.arguments = new Object[]{message};
     }
 
     public GameException(Exception e) {
-        this(RacingGameMessage.EXCEPTION_FORMAT, e.getMessage());
+        this(e.getMessage());
     }
 
-    public GameException(RacingGameMessage racingGameMessage, Object... arguments) {
-        if (!checkValid(racingGameMessage, arguments)) {
-            throw new GameException(
-                    RacingGameMessage.GAME_INTERNAL_EXCEPTION_FORMAT,
-                    String.format(
-                            "MessageKey and Arguments are invalid. [%s] [%s]",
-                            racingGameMessage,
-                            Arrays.toString(arguments)
-                    )
-            );
+    public GameException(GameExceptionCode exceptionCode, Object object) {
+        if (!exceptionCode.checkDtoObjectValid(object)) {
+            throw new GameException(this.getClass().getSimpleName() + "'s Constructor Invalid Parameters");
         }
 
-        this.racingGameMessage = racingGameMessage;
-        this.arguments = arguments;
+        this.exceptionCode = exceptionCode;
+        this.arguments = exceptionCode.getFormatArguments(object);
     }
 
-    public static boolean checkValid(RacingGameMessage racingGameMessage, Object... arguments) {
-        if (racingGameMessage == null) {
-            return false;
-        }
-
-        Class<?>[] argumentClasses = racingGameMessage.getArgumentsClass();
-
-        if (arguments == null || argumentClasses.length != arguments.length) {
-            return false;
-        }
-
-        for (int i = 0; i < argumentClasses.length; i++) {
-            if (!argumentClasses[i].isInstance(arguments[i])) {
-                return false;
-            }
-        }
-
-        return true;
+    public String getMessageKey() {
+        return this.exceptionCode.getMessageKey();
     }
 
     @Override
-    public String getMessage() {
-        if (checkValid(racingGameMessage, arguments)) {
-            return String.format(racingGameMessage.getSampleMessage(), arguments);
-        }
-
-        return super.getMessage();
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GameThrowable{");
+        sb.append("exceptionCode=").append(exceptionCode);
+        sb.append(", arguments=").append(Arrays.toString(arguments));
+        sb.append('}');
+        return sb.toString();
     }
 }
