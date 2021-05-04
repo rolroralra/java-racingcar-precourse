@@ -14,12 +14,12 @@ public class RacingCar extends AbstractRacingCar implements Comparable<RacingCar
     private int score;
 
     public RacingCar(String name) {
+        this.name = name;
+        this.score = 0;
+
         if (!isValidName(name)) {
             throw new GameException(GameExceptionCode.RACING_CAR_INVALID_NAME, this);
         }
-
-        this.name = name;
-        this.score = 0;
     }
 
     public static RacingCar of(String name) {
@@ -54,11 +54,9 @@ public class RacingCar extends AbstractRacingCar implements Comparable<RacingCar
     }
 
     public String description() {
-        final StringBuilder sb = new StringBuilder("RacingCar{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", score=").append(score);
-        sb.append('}');
-        return sb.toString();
+        return "RacingCar{" + "name='" + name + '\'' +
+                ", score=" + score +
+                '}';
     }
 
     @Override

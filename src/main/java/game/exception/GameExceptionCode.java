@@ -3,11 +3,13 @@ package game.exception;
 import game.constants.GameMessage;
 import game.model.RacingCar;
 import game.model.RacingGame;
+import lombok.Getter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.function.Function;
 
+@Getter
 public enum GameExceptionCode {
     RACING_CAR_INVALID_NAME(
             "1001",
@@ -99,12 +101,10 @@ public enum GameExceptionCode {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RacingGameExceptionCode{");
-        sb.append("code='").append(code).append('\'');
-        sb.append(", racingGameMessage='").append(gameMessage).append('\'');
-        sb.append(", dtoClass=").append(dtoClass);
-        sb.append(", argumentClasses=").append(Arrays.toString(argumentClasses));
-        sb.append('}');
-        return sb.toString();
+        return "RacingGameExceptionCode{" + "code='" + code + '\'' +
+                ", racingGameMessage='" + gameMessage + '\'' +
+                ", dtoClass=" + dtoClass +
+                ", argumentClasses=" + Arrays.toString(argumentClasses) +
+                '}';
     }
 }

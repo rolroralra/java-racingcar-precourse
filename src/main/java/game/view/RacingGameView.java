@@ -1,6 +1,7 @@
 package game.view;
 
 import game.config.GameConfig;
+import game.exception.GameException;
 import game.model.RacingGame;
 
 public class RacingGameView extends GameView {
@@ -17,7 +18,7 @@ public class RacingGameView extends GameView {
     public void printRacingCarsInputPrompt() {
         println(
                 String.format(
-                        config.getMessage("RACING_CARS_INPUT_DELIMITER"),
+                        config.getMessage("RACING_CARS_INPUT_PROMPT_FORMAT"),
                         RACING_CARS_INPUT_DELIMITER_NAME,
                         RACING_CARS_INPUT_DELIMITER
                 )
@@ -46,10 +47,18 @@ public class RacingGameView extends GameView {
         );
     }
 
-
     public void printRacingGameHistory(RacingGame racingGame) {
         println(
                 racingGame.getHistoryString()
+        );
+    }
+
+    public void printGameException(GameException e) {
+        println(
+                String.format(
+                        config.getMessage(e.getMessageKey()),
+                        e.getArguments()
+                )
         );
     }
 }

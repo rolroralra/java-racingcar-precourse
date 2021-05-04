@@ -23,13 +23,14 @@ public class RacingGame {
     }
 
     public RacingGame(int totalTryCount, List<RacingCar> racingCarList) {
+        this.racingCarList = racingCarList;
+        this.tryCount = 0;
+        this.totalTryCount = totalTryCount;
+
         if (!checkTotalTryCount(totalTryCount) || !checkRacingCarList(racingCarList)) {
             throw new GameException(GameExceptionCode.RACING_GAME_INVALID, this);
         }
 
-        this.racingCarList = racingCarList;
-        this.tryCount = 0;
-        this.totalTryCount = totalTryCount;
         this.racingHistoryList = new ArrayList<>(totalTryCount);
     }
 

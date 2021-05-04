@@ -13,6 +13,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Arrays;
 import java.util.Random;
 
+import static game.exception.GameExceptionCode.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
 public class GameViewTest {
     private GameConfig config;
     private GameView gameView;
@@ -56,23 +59,46 @@ public class GameViewTest {
         gameView.println(new GameException(new RuntimeException("RuntimeException02")));
         gameView.println(new GameException(GameExceptionCode.RACING_CAR_INVALID_NAME, racingCarArray[0]));
         gameView.println(new GameException(GameExceptionCode.RACING_GAME_INVALID, racingGame));
-        gameView.println(new GameException(GameExceptionCode.RACING_GAME_NOT_COMPLETED, racingGame));
+        gameView.println(new GameException(RACING_GAME_NOT_COMPLETED, racingGame));
+    }
+
+    @DisplayName("예외_메시지_포맷_확인_테스트")
+    @ParameterizedTest
+    @ValueSource(strings = {"en", "ko"})
+    void 예외_메시지_포맷_확인_테스트(String language) {
+        init(language);
+
+        gameView.println(1);
+        gameView.println("test");
+        gameView.println(new Object());
+        racingGame.nextAllStep();
+
+        gameView.println();
+        gameView.println(racingGame);
+        gameView.println();
+
+        Arrays.stream(racingCarArray).forEach(gameView::println);
+
+        assertException(new GameException(RACING_CAR_INVALID_NAME, racingCarArray[0]), RACING_CAR_INVALID_NAME);
+        assertException(new GameException(RACING_GAME_INVALID, racingGame), RACING_GAME_INVALID);
+        assertException(new GameException(RACING_GAME_NOT_COMPLETED, racingGame), RACING_GAME_NOT_COMPLETED);
     }
 
     @DisplayName("출력_함수_예외_발생_테스트")
     @ParameterizedTest
     @ValueSource(strings = {"en", "ko"})
     void 출력_함수_GameException_출력_중_예외_발생_테스트(String language) {
-//        init(language);
-//        Arrays.stream(RacingGameMessage.values())
-//                .filter(messageKey -> messageKey.getArgumentsClass().length > 0)
-//                .forEach(messageKey ->
-//                        assertThatExceptionOfType(RacingGameException.class)
-//                                .isThrownBy(() -> {
-//                                    RacingGameException e = new RacingGameException(messageKey);
-//                                    gameView.println(e);
-//                                })
-//                );
+        init(language);
+
+        Arrays.stream(GameExceptionCode.values())
+                .filter(code -> code.getArgumentClasses().length > 0)
+                .forEach(messageKey ->
+                        assertThatExceptionOfType(GameException.class)
+                                .isThrownBy(() -> {
+                                    GameException e = new GameException(messageKey, new Object());
+                                    gameView.println(e);
+                                })
+                );
     }
 
 
@@ -82,4 +108,12 @@ public class GameViewTest {
                 .build();
         gameView = new GameView(config);
     }
+
+    private void assertException(Exception e, GameExceptionCode code) {
+        assertThatExceptionOfType(GameException.class).isThrownBy(() -> {
+                    throw e;
+                }
+        );
+    }
+
 }

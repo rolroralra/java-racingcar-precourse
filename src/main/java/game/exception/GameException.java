@@ -1,8 +1,11 @@
 package game.exception;
 
+import game.config.GameConfig;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @Getter
 public class GameException extends RuntimeException {
@@ -33,11 +36,19 @@ public class GameException extends RuntimeException {
     }
 
     @Override
+    public String getMessage() {
+        return getMessage(Locale.getDefault());
+    }
+
+    public String getMessage(Locale locale) {
+        return ResourceBundle.getBundle(GameConfig.MESSAGE_BUNDLE_NAME, locale).getString(getExceptionCode().getMessageKey());
+
+    }
+
+    @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GameThrowable{");
-        sb.append("exceptionCode=").append(exceptionCode);
-        sb.append(", arguments=").append(Arrays.toString(arguments));
-        sb.append('}');
-        return sb.toString();
+        return "GameThrowable{" + "exceptionCode=" + exceptionCode +
+                ", arguments=" + Arrays.toString(arguments) +
+                '}';
     }
 }

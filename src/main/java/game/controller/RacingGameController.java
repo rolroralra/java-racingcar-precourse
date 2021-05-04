@@ -1,6 +1,7 @@
 package game.controller;
 
 import game.config.GameConfig;
+import game.exception.GameException;
 import game.model.RacingCar;
 import game.model.RacingGame;
 import game.view.RacingGameView;
@@ -53,6 +54,11 @@ public class RacingGameController extends GameTemplate {
 
     @Override
     protected void handleException(Exception e) {
+        if (e instanceof GameException) {
+            view.printGameException((GameException) e);
+            return;
+        }
+
         view.println(e);
     }
 
