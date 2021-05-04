@@ -2,6 +2,7 @@ package game.model;
 
 import game.exception.GameException;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.StringJoiner;
 @Getter
 public class RacingHistory {
     private final List<RacingCar> historyRacingCarList;
+
+    public RacingHistory(@NonNull RacingGame racingGame) {
+        this(racingGame.getRacingCarList());
+    }
 
     public RacingHistory(List<RacingCar> racingCarList) {
         this.historyRacingCarList = new ArrayList<>();

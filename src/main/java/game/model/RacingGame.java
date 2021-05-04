@@ -68,7 +68,7 @@ public class RacingGame {
     }
 
     public void addHistory() {
-        racingHistoryList.add(new RacingHistory(racingCarList));
+        racingHistoryList.add(new RacingHistory(this));
     }
 
     public List<RacingCar> findWinners() {

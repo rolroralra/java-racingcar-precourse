@@ -42,21 +42,21 @@ public class GameViewTest {
     void 출력_함수_정상작동_테스트(String language) {
         init(language);
 
-        gameView.print(1);
-        gameView.print("test");
-        gameView.print(new Object());
+        gameView.println(1);
+        gameView.println("test");
+        gameView.println(new Object());
         racingGame.nextAllStep();
 
-        gameView.printNewLine();
-        gameView.print(racingGame);
-        gameView.printNewLine();
+        gameView.println();
+        gameView.println(racingGame);
+        gameView.println();
 
-        Arrays.stream(racingCarArray).forEach(gameView::print);
+        Arrays.stream(racingCarArray).forEach(gameView::println);
 
-        gameView.print(new Exception("Exception"));
-        gameView.print(new RuntimeException("RuntimeException01"));
-        gameView.print(new GameException(new RuntimeException("RuntimeException02")));
-        gameView.print(new GameException(RacingGameMessage.EXCEPTION_FORMAT, "테스트 예외 상황"));
+        gameView.println(new Exception("Exception"));
+        gameView.println(new RuntimeException("RuntimeException01"));
+        gameView.println(new GameException(new RuntimeException("RuntimeException02")));
+        gameView.println(new GameException(RacingGameMessage.EXCEPTION_FORMAT, "테스트 예외 상황"));
     }
 
     @DisplayName("출력_함수_예외_발생_테스트")
@@ -70,7 +70,7 @@ public class GameViewTest {
                         assertThatExceptionOfType(GameException.class)
                                 .isThrownBy(() -> {
                                     GameException e = new GameException(messageKey);
-                                    gameView.print(e);
+                                    gameView.println(e);
                                 })
                 );
     }

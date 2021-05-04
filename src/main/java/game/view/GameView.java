@@ -20,23 +20,23 @@ public class GameView {
         }
     }
 
-    protected void println(String inputString) {
+    private void _println(String inputString) {
         _print(inputString + "\n");
     }
 
-    public void print(Object object) {
-        println(object.toString());
-    }
-
-    public void print(Exception e) {
-        println(e.getMessage());
-    }
-
-    public void print(GameException e){
-        println(String.format(config.getMessage(e.getRacingGameMessage()), e.getArguments()));
-    }
-
-    public void printNewLine() {
+    public void println() {
         _print("\n");
+    }
+
+    public void println(Object object) {
+        _println(object.toString());
+    }
+
+    public void println(Exception e) {
+        _println(e.getMessage());
+    }
+
+    public void println(GameException e){
+        _println(String.format(config.getMessage(e.getRacingGameMessage()), e.getArguments()));
     }
 }

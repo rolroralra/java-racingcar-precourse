@@ -9,8 +9,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 public abstract class GameTemplate {
+    // GameConfig Bean
     protected GameConfig config;
+
+    // Writer Bean
     protected PrintStream writer;
+
+    // Reader Bean
     protected BufferedReader reader;
 
     public GameTemplate(GameConfig config) {
@@ -21,19 +26,24 @@ public abstract class GameTemplate {
 
     public void run() {
         try {
+            // Process Run Start
             totalProcess();
         } catch (Exception e) {
+            // Exception Handling
             handleException(e);
         }
     }
 
     private void totalProcess() {
+        // 1. Init
         init();
 
         do {
+            // 2. Process during completion
             process();
         } while(!isCompleted());
 
+        // 3. Destroy
         destroy();
     }
 

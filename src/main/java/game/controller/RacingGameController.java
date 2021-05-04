@@ -30,7 +30,7 @@ public class RacingGameController extends GameTemplate {
 
         racingGame = new RacingGame(totalTryCount, racingCarList);
 
-        view.printNewLine();
+        view.println();
     }
 
     @Override
@@ -47,13 +47,13 @@ public class RacingGameController extends GameTemplate {
     protected void destroy() {
         view.printRacingGameResultPrompt();
         view.printRacingGameHistory(racingGame);
-        view.printNewLine();
+        view.println();
         view.printRacingGameResult(racingGame);
     }
 
     @Override
     protected void handleException(Exception e) {
-        view.print(e);
+        view.println(e);
     }
 
     private int readTotalTryCount() {
